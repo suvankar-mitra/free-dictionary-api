@@ -15,6 +15,14 @@ server:
 dict_admin_user: admin
 dict_admin_password: admin
 
+# Logging configuration
+logging:
+  level:
+    root: INFO # Default log level
+    cc.suvankar.dictionaryapi: DEBUG # Specific package log level
+  file:
+    name: logs/free-dictionary-api.log # Log file location
+
 ---
 # H2 profile-specific properties
 spring:
