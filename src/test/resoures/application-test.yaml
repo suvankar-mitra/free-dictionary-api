@@ -1,0 +1,27 @@
+# Common properties (applies to all profiles)
+spring:
+  application:
+    name: free-dictionary-api
+  profiles:
+    active: test  # Default profile
+
+---
+# H2 profile-specific properties
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+      data-locations:
+      - schema-test-h2.sql
