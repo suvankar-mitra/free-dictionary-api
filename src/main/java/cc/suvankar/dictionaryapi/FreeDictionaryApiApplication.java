@@ -24,10 +24,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "cc.suvankar.dictionaryapi.repositories")
-public class GcideXmlParserApplication {
+public class FreeDictionaryApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GcideXmlParserApplication.class, args);
+		SpringApplication.run(FreeDictionaryApiApplication.class, args);
 	}
 
 }

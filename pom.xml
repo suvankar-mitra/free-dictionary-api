@@ -103,7 +103,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>cc.suvankar.dictionaryapi.GcideXmlParserApplication</mainClass>
+							<mainClass>cc.suvankar.dictionaryapi.FreeDictionaryApiApplication</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>

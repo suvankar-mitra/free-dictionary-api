@@ -31,9 +31,9 @@ import cc.suvankar.dictionaryapi.data.DictionaryEntry;
 import cc.suvankar.dictionaryapi.repositories.DictionaryEntryRepository;
 import cc.suvankar.dictionaryapi.services.XmlProcessor;
 
-@SpringBootTest(classes = GcideXmlParserApplication.class)
+@SpringBootTest(classes = FreeDictionaryApiApplication.class)
 @ActiveProfiles("test")
-class GcideXmlParserApplicationTests {
+class FreeDictionaryApiApplicationTests {
 
 	@Autowired
 	private DictionaryEntryRepository dictionaryEntryRepository;
