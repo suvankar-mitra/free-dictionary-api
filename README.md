@@ -13,7 +13,7 @@ This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collabo
 
 ## Technologies Used
 
-- **Java** (JDK 11 or later)
+- **Java** (JDK 17 or later)
 - **H2 Database** (for local storage)
 - **SQLite Database** (for local storage)
 - **DOM API** (for XML parsing)
