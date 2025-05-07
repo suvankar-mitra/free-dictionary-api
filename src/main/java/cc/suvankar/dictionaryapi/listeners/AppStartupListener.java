@@ -14,6 +14,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import cc.suvankar.dictionaryapi.services.DictionaryEntryService;
 import cc.suvankar.dictionaryapi.services.XmlProcessor;
 
 @Component
@@ -26,15 +28,31 @@ public class AppStartupListener {
     @Autowired
     private XmlProcessor xmlProcessor;
 
+    @Autowired
+    private DictionaryEntryService dictionaryEntryService;
+
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
-        LOG.info("Application is ready to serve requests. Parsing files...");
+        LOG.info("Application is ready to serve requests.");
         try {
+            // Check if the dictionary is already populated
+            LOG.info("Checking if dictionary is already populated...");
+            if (isDatabasePopulated()) {
+                LOG.info("Dictionary is already populated.");
+                return;
+            }
+            LOG.info("Dictionary is not populated. Parsing files...");
             // Automatically parse all files at startup
             parseAllFiles();
         } catch (Exception e) {
             LOG.error("Error during startup parsing: {}", e.getMessage());
         }
+    }
+
+    private boolean isDatabasePopulated() {
+        long totalEntries = dictionaryEntryService.getTotalEntriesCount();
+        LOG.info("Total dictionary entries found: {}", totalEntries);
+        return totalEntries > 124000;
     }
 
     private void parseAllFiles() {

@@ -19,6 +19,7 @@ package cc.suvankar.dictionaryapi.repositories;
 
 import cc.suvankar.dictionaryapi.data.DictionaryEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,4 +30,7 @@ public interface DictionaryEntryRepository extends JpaRepository<DictionaryEntry
     List<DictionaryEntry> findByEntryWord(String entryWord);
 
     boolean existsByEntryWord(String entryWord);
+
+    @Query("SELECT COUNT(e) FROM DictionaryEntry e")
+    long countTotalEntries();
 }

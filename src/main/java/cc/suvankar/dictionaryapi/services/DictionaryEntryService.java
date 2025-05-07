@@ -74,4 +74,10 @@ public class DictionaryEntryService {
 
         return pojoEntries;
     }
+
+    @Transactional
+    public long getTotalEntriesCount() {
+        LOG.info("Fetching total count of dictionary entries.");
+        return repository.countTotalEntries();
+    }
 }

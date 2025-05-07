@@ -37,8 +37,8 @@ spring:
       ddl-auto: update
   sql:
     init:
-      mode: always
-      data-locations:
+      mode: embedded
+      schema-locations:
       - classpath:schema-h2.sql
   h2:
     console:
