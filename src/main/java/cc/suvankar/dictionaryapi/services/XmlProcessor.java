@@ -128,7 +128,15 @@ public class XmlProcessor {
     }
 
     private void saveIntoDatabaseMultiThread(List<DictionaryEntry> dictionaryEntries) {
-        int numberOfThreads = Runtime.getRuntime().availableProcessors();
+        if (dictionaryEntries.isEmpty()) {
+            LOG.warn("No entries to save into database.");
+            return;
+        }
+        LOG.info("Saving {} entries into database.", dictionaryEntries.size());
+        // Only use half of the available processors for parsing
+        // to avoid overloading the system
+        // and allow other processes to run smoothly.
+        int numberOfThreads = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
 
         for (DictionaryEntry entry : dictionaryEntries) {

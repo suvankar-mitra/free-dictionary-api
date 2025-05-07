@@ -40,7 +40,10 @@ public class AppStartupListener {
     private void parseAllFiles() {
         Path directory = Paths.get("src/main/resources/GCIDE");
 
-        int numberOfThreads = Runtime.getRuntime().availableProcessors();
+        // Only use half of the available processors for parsing
+        // to avoid overloading the system
+        // and allow other processes to run smoothly.
+        int numberOfThreads = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
 
         try (Stream<Path> files = Files.list(directory)) {
@@ -49,7 +52,7 @@ public class AppStartupListener {
                     .forEach(filePath -> {
                         String fileName = filePath.toString();
                         if (fileName.startsWith("CIDE") && fileName.endsWith(".xml")) {
-                            LOG.info("Parsing file {}", fileName);
+                            LOG.info("Starting thread to parse file {}", fileName);
                             executorService.execute(() -> {
                                 try {
                                     xmlProcessor.processAndPersistXml(fileName);
