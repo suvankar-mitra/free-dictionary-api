@@ -46,7 +46,7 @@ class FreeDictionaryApiApplicationTests {
 
 		xmlProcessor.processAndPersistXml("CIDE.A.xml");
 
-		List<DictionaryEntry> entries = dictionaryEntryRepository.findByEntryWord("abandon");
+		List<DictionaryEntry> entries = dictionaryEntryRepository.findByEntryWordIgnoreCase("abandon");
 		assertEquals("abandon", entries.get(0).getEntryWord().toLowerCase(Locale.ENGLISH).trim());
 	}
 

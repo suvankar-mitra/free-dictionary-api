@@ -56,9 +56,12 @@ public class DictionaryEntryService {
     public List<cc.suvankar.dictionaryapi.models.DictionaryEntry> findEntriesByWord(final String word) {
         LOG.info("Finding entries for word {}", word);
 
-        List<cc.suvankar.dictionaryapi.data.DictionaryEntry> entityEntries = repository.findByEntryWord(word);
+        List<cc.suvankar.dictionaryapi.data.DictionaryEntry> entityEntries = repository.findByEntryWordIgnoreCase(word);
 
-        if (entityEntries.isEmpty() || entityEntries == null) {
+        entityEntries.addAll(repository.findByVerbMorphologyEntry(word));
+
+        if(entityEntries.isEmpty() || entityEntries == null) {
+            LOG.info("No entries found for word {}.", word);
             return null;
         }
 
