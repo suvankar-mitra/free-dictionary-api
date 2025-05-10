@@ -18,6 +18,7 @@ CREATE TABLE dictionary_entry (
     entry_word VARCHAR(255),
     head_word VARCHAR(255),
     source VARCHAR(255),
+    etymology TEXT,
     PRIMARY KEY (id)
 );
 

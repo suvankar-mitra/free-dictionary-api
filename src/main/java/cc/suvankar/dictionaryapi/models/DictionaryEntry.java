@@ -22,9 +22,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -34,11 +36,12 @@ public class DictionaryEntry {
     private String entryWord;
     private String headWord;
     private List<Definition> definitions = new LinkedList<>();
-    private List<String> partsOfSpeech = new LinkedList<>();
+    private Set<String> partsOfSpeech = new LinkedHashSet<>();
     private Synonym synonym = new Synonym();
 
     private List<VerbMorphologyEntry> verbMorphologyEntries = new LinkedList<>();
     private List<Quote> quotes = new LinkedList<>();
+    private String etymology;
 
 
     @Override
@@ -52,7 +55,8 @@ public class DictionaryEntry {
                 Objects.equals(partsOfSpeech, that.partsOfSpeech) &&
                 Objects.equals(synonym, that.synonym) &&
                 Objects.equals(verbMorphologyEntries, that.verbMorphologyEntries) &&
-                Objects.equals(quotes, that.quotes);
+                Objects.equals(quotes, that.quotes) &&
+                Objects.equals(etymology, that.etymology);
     }
 
     @Override

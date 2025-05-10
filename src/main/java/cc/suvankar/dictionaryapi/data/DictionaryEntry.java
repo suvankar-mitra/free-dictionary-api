@@ -22,8 +22,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "dictionary_entry")
@@ -43,7 +45,7 @@ public class DictionaryEntry {
     private List<Definition> definitions = new LinkedList<>();
 
     @ElementCollection
-    private List<String> partsOfSpeech = new LinkedList<>();
+    private Set<String> partsOfSpeech = new LinkedHashSet<>();
 
     @Embedded
     private Synonym synonym = new Synonym();
@@ -55,4 +57,6 @@ public class DictionaryEntry {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "dictionary_entry_id")
     private List<Quote> quotes = new LinkedList<>();
+    @Column(columnDefinition = "TEXT")
+    private String etymology;
 }

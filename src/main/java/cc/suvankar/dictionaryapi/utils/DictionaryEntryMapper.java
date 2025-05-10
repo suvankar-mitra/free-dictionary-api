@@ -40,6 +40,7 @@ public class DictionaryEntryMapper {
         entitySyn.setSource(pojo.getSynonym().getSource());
         entitySyn.setSynonymList(pojo.getSynonym().getSynonymList());
         entity.setSynonym(entitySyn);
+        entity.setEtymology(pojo.getEtymology());
 
         for(cc.suvankar.dictionaryapi.models.VerbMorphologyEntry pojoVerb: pojo.getVerbMorphologyEntries()) {
             cc.suvankar.dictionaryapi.data.VerbMorphologyEntry entityVerb = new cc.suvankar.dictionaryapi.data.VerbMorphologyEntry();
@@ -63,6 +64,7 @@ public class DictionaryEntryMapper {
         cc.suvankar.dictionaryapi.models.DictionaryEntry entity = new cc.suvankar.dictionaryapi.models.DictionaryEntry();
         entity.setEntryWord(pojo.getEntryWord());
         entity.setHeadWord(pojo.getHeadWord());
+        entity.setEtymology(pojo.getEtymology());
 
         for(cc.suvankar.dictionaryapi.data.Definition pojoDef : pojo.getDefinitions()) {
             cc.suvankar.dictionaryapi.models.Definition entityDef = new cc.suvankar.dictionaryapi.models.Definition();
