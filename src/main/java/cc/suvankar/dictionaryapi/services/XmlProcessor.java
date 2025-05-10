@@ -86,6 +86,12 @@ public class XmlProcessor {
                 pTagContent = pTagContent
                         .replaceAll("(?s)<!--.*?-->", "") // remove all the comments
                         .replaceAll("<\\?/", "")// replace all (<?/) with ''
+                        .replaceAll("<ldquo/", "\"")
+                        .replaceAll("<rdquo/", "\"")
+                        .replaceAll("<lsquo/", "'")
+                        .replaceAll("<rsquo/", "'")
+                        .replaceAll("<lt/", "&lt")
+                        .replaceAll("<gt/", "&gt")
                         .replaceAll("<(\\w+)/", "{$1/}") // replace all <acr/ like patterns with /{acr/}
                         .replaceAll("(?i)\\{br\\s*/?}", "")
                         .replaceAll("&(?!\\w+;)", "&amp;") // ignore & characters

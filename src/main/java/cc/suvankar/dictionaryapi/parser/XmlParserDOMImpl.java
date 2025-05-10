@@ -28,6 +28,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,7 +37,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 @Component("xmlParserDOMImpl")
 public class XmlParserDOMImpl implements XmlParser {
@@ -61,8 +62,8 @@ public class XmlParserDOMImpl implements XmlParser {
             if (document.getElementsByTagName("ent").getLength() > 0) {
                 String entTokenValue = document.getElementsByTagName("ent").item(0).getTextContent()
                         .replaceAll("\n", " ")
-                        .trim()
-                        .toLowerCase(Locale.ENGLISH);
+                        .trim();
+                        //.toLowerCase(Locale.ENGLISH);
                 entry.setEntryWord(entTokenValue);
             } else {
                 // no entry available, just return from here
@@ -71,16 +72,20 @@ public class XmlParserDOMImpl implements XmlParser {
 
             // <hw>
             if (document.getElementsByTagName("hw").getLength() > 0) {
-                String hwTokenValue = document.getElementsByTagName("hw").item(0).getTextContent().replaceAll("\n",
-                        " ");
-                entry.setHeadWord(hwTokenValue);
+                String hwRaw = document.getElementsByTagName("hw").item(0).getTextContent();
+                String hwClean = normalizeHeadword(hwRaw);
+                entry.setHeadWord(hwClean);
             }
+
 
             // <def>
             if (document.getElementsByTagName("def").getLength() > 0) {
-                String defTokenValue = document.getElementsByTagName("def").item(0).getTextContent().replaceAll("\n",
-                        " ");
-                defTokenValue = defTokenValue.replaceAll("\n", " ");
+
+                String defTokenValue = document.getElementsByTagName("def").item(0).getTextContent().replaceAll("\n", " ").trim();
+
+                // Clean known XML-like artifacts
+                defTokenValue = defTokenValue.replaceAll("\\{ldquo/\\}", "\"");
+                defTokenValue = defTokenValue.replaceAll("\\{rdquo/\\}", "\"");
 
                 Definition definition = new Definition();
                 definition.setDefinition(defTokenValue);
@@ -95,13 +100,31 @@ public class XmlParserDOMImpl implements XmlParser {
                 entry.getDefinitions().add(definition);
             }
 
+            // <ety>
+            if (document.getElementsByTagName("ety").getLength() > 0) {
+                String etyTokenValue = document.getElementsByTagName("ety").item(0).getTextContent().replaceAll("\n", " ").trim();
+                entry.setEtymology(etyTokenValue);
+            }
+
             // <pos>
-            if (document.getElementsByTagName("pos").getLength() > 0) {
-                String posTokenValue = document.getElementsByTagName("pos").item(0).getTextContent().replaceAll("\n",
-                        " ");
+            NodeList posNodes = document.getElementsByTagName("pos");
+
+            for (int i = 0; i < posNodes.getLength(); i++) {
+                Node posNode = posNodes.item(i);
+
+                // Skip if this <pos> is inside a <def> tag
+                if (isInsideDef(posNode)) {
+                    continue;
+                }
+
+                String posTokenValue = posNode.getTextContent().replaceAll("\n", " ");
                 List<String> posAbbrList = List.of(posTokenValue.split("&"));
-                posAbbrList
-                        .forEach(abbr -> entry.getPartsOfSpeech().add(Abbreviations.ABBREVIATION_MAP.get(abbr.trim())));
+                posAbbrList.forEach(abbr -> {
+                    String mapped = Abbreviations.ABBREVIATION_MAP.get(abbr.trim());
+                    if (mapped != null) {
+                        entry.getPartsOfSpeech().add(mapped);
+                    }
+                });
             }
 
             // <syn>
@@ -212,6 +235,9 @@ public class XmlParserDOMImpl implements XmlParser {
                                         .trim());
                     }
 
+                    definition.setDefinition(definition.getDefinition().replaceAll("\\{ldquo/\\}", "\""));
+                    definition.setDefinition(definition.getDefinition().replaceAll("\\{rdquo/\\}", "\""));
+
                     entry.getDefinitions().add(definition);
                 }
             }
@@ -252,4 +278,27 @@ public class XmlParserDOMImpl implements XmlParser {
             throw new XmlParserException(e.getMessage(), e);
         }
     }
+
+    private String normalizeHeadword(String rawHeadword) {
+        return rawHeadword
+                .replace("\\\"", "\"")  // in case of escape chars
+                .replace("\"", "·")
+                .replace("*", "·")
+                .replace("`", "")
+                .replaceAll("\\s+", " ")
+                .trim();
+    }
+
+    private boolean isInsideDef(Node node) {
+        Node parent = node.getParentNode();
+        while (parent != null) {
+            if (parent.getNodeName().equalsIgnoreCase("def")) {
+                return true;
+            }
+            parent = parent.getParentNode();
+        }
+        return false;
+    }
+    
+    
 }
