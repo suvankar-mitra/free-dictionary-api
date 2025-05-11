@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EndpointsController {
 
-    @GetMapping("/api/v1/endpoints")
+    @GetMapping("/dictionaryapi/v1/endpoints")
     public List<String> getEndpoints() {
         return Arrays.asList(
-                "/api/v1/parse?file={file}",
-                "/api/v1/definitions?word={word}",
-                "/api/v1/endpoints");
+                "/dictionaryapi/v1/parse?file={file}",
+                "/dictionaryapi/v1/definitions?word={word}",
+                "/dictionaryapi/v1/endpoints");
     }
 }

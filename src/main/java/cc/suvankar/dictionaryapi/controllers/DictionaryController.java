@@ -32,7 +32,7 @@ import cc.suvankar.dictionaryapi.models.DictionaryEntry;
 import cc.suvankar.dictionaryapi.services.DictionaryEntryService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/dictionaryapi/v1")
 public class DictionaryController {
 
     private static final Logger LOG = LoggerFactory.getLogger(DictionaryController.class);

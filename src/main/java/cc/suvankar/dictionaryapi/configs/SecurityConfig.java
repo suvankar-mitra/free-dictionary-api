@@ -42,10 +42,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/v1/parse").hasRole("ADMIN")
-                        .requestMatchers("/actuator/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/definitions").permitAll()
-                        .requestMatchers("/api/v1/endpoints").permitAll()
+                        .requestMatchers("/dictionaryapi/v1/parse").hasRole("ADMIN")
+                        .requestMatchers("/dictionaryapi/v1/definitions").permitAll()
+                        .requestMatchers("/dictionaryapi/v1/endpoints").permitAll()
                         .anyRequest().denyAll())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
