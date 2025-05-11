@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cc.suvankar.dictionaryapi.services.XmlProcessor;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +34,13 @@ public class ParserController {
 
     @GetMapping("/parse")
     public ResponseEntity<HttpStatus> parse(@RequestParam String file) {
-        Path directory = Paths.get("src/main/resources/GCIDE");
+        Path directory;
+        try {
+            URI uri = getClass().getClassLoader().getResource("GCIDE").toURI();
+            directory = Paths.get(uri);
+        } catch (URISyntaxException | NullPointerException e) {
+            throw new RuntimeException("Unable to locate GCIDE resource directory", e);
+        }
 
         int numberOfThreads = Runtime.getRuntime().availableProcessors();
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);

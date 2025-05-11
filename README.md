@@ -27,7 +27,7 @@ This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collabo
   - The GCIDE XML dataset is downloaded from [GCIDE Project](https://gcide.gnu.org.ua/), 
     (with slight modification) and copied into resources directory.
 
-### Steps to Run
+### Steps to Run (container)
 
 1. Clone this repository:
    ```sh
@@ -36,11 +36,19 @@ This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collabo
    ```
 2. Build the project using Maven or Gradle:
    ```sh
-   mvnw clean install
+   ./build-and-containerize.sh
    ```
-3. Run the application:
+3. Run the application using `podman`:
    ```sh
-   mvnw spring-boot:run
+   podman run -d --restart unless-stopped --name free-dictionary-api -p 8010:8010 free-dictionary-api:latest
+   ```
+   
+   OR
+   
+   Run the application using `docker`:
+   ```sh
+   docker run -d --restart unless-stopped --name free-dictionary-api -p 8010:8010 free-dictionary-api:latest
+
    ```
 4. The data will be stored in an **H2 database file** or **SQLite database file**, accessible via **JDBC URL**.
 

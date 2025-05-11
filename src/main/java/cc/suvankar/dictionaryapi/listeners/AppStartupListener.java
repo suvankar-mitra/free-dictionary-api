@@ -1,5 +1,7 @@
 package cc.suvankar.dictionaryapi.listeners;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -56,7 +58,13 @@ public class AppStartupListener {
     }
 
     private void parseAllFiles() {
-        Path directory = Paths.get("src/main/resources/GCIDE");
+        Path directory;
+        try {
+            URI uri = getClass().getClassLoader().getResource("GCIDE").toURI();
+            directory = Paths.get(uri);
+        } catch (URISyntaxException | NullPointerException e) {
+            throw new RuntimeException("Unable to locate GCIDE resource directory", e);
+        }
 
         // Only use half of the available processors for parsing
         // to avoid overloading the system
