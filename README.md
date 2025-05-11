@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collaborative International Dictionary of English) XML data** and store it in a **local H2/SQLite database** for efficient querying and usage.
+This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collaborative International Dictionary of English) XML data** and store it in a **local H2/SQLite database** for efficient querying (REST API) and usage.
 
 ## Features
 
@@ -10,6 +10,7 @@ This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collabo
 - Stores structured data in an H2 relational database.
 - Provides a foundation for fast lookups and efficient querying.
 - Lightweight and easy to integrate into other applications.
+- Query the database using REST endpoints.
 
 ## Technologies Used
 
@@ -18,12 +19,13 @@ This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collabo
 - **SQLite Database** (for local storage)
 - **DOM API** (for XML parsing)
 - **Spring Boot** (optional, for managing database interactions)
+- **Docker** (optional, for containerizaton)
 
 ## Setup & Installation
 
 ### Prerequisites
 
-- Ensure you have **Java 11+** installed.
+- Ensure you have **Java 17+** installed.
   - The GCIDE XML dataset is downloaded from [GCIDE Project](https://gcide.gnu.org.ua/), 
     (with slight modification) and copied into resources directory.
 
@@ -38,30 +40,19 @@ This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collabo
    ```sh
    ./build-and-containerize.sh
    ```
-3. Run the application using `podman`:
-   ```sh
-   podman run -d --restart unless-stopped --name free-dictionary-api -p 8010:8010 free-dictionary-api:latest
-   ```
-   
-   OR
-   
-   Run the application using `docker`:
+3. Run the application using `docker`:
    ```sh
    docker run -d --restart unless-stopped --name free-dictionary-api -p 8010:8010 free-dictionary-api:latest
-
    ```
-4. The data will be stored in an **H2 database file** or **SQLite database file**, accessible via **JDBC URL**.
+   
+4. You can then access the API
+   ```sh
+   curl -v 'localhost:8010/dictionaryapi/v1/definitions?word=hello'
+   ```
 
-### Example Screenshots of data (h2)
-![Alt text](screenshots/H2/jbbc-string.png?raw=true "JDBC connection")
-![Alt text](screenshots/H2/query-execution-output.png?raw=true "SQL execution")
+### Example Screenshots of data (RESTer)
+<img src="screenshots/REST_client_output.png" alt="REST API output of word hello" width="400">
 
-## Database Schema
-
-The parsed dictionary data is structured into tables, such as:
-
-- `entries (id, word, definition, part_of_speech, example, etc.)`
-- `relations (entry_id, synonym, antonym, related_word, etc.)`
 
 ## License
 This project is licensed under the **GNU General Public License (GPL)**.
