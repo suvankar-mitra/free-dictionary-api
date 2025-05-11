@@ -27,34 +27,34 @@ if [ -z "$JAR_FILE" ]; then
   exit 1
 fi
 # Copy the JAR file to a known location
-# This is a workaround for the Podman build context issue
+# This is a workaround for the Docker build context issue
 cp target/"$JAR_FILE" target/app.jar
 
 # Define image name
 IMAGE_NAME="${APP_NAME}:latest"
 
 
-# Check if Podman is installed
-if ! command -v podman &> /dev/null; then
-  echo "Podman could not be found. Please install Podman to continue."
+# Check if Docker is installed
+if ! command -v docker &> /dev/null; then
+  echo "Docker could not be found. Please install Docker to continue."
   exit 1
 fi
-# Check if the Podman daemon is running
-if ! podman info &> /dev/null; then
-  echo "Podman daemon is not running. Please start the Podman daemon to continue."
+# Check if the Docker daemon is running
+if ! docker info &> /dev/null; then
+  echo "Docker daemon is not running. Please start the Docker daemon to continue."
   exit 1
 fi
 
 echo "Application JAR built successfully: $JAR_FILE"
 
-# Step 3: Build the Podman container image
-echo "Building the Podman container image..."
-podman build -t "$IMAGE_NAME" .
+# Step 3: Build the Docker container image
+echo "Building the Docker container image..."
+docker build -t "$IMAGE_NAME" .
 
 # Step 4: Confirm the image was built
-if podman images | grep -q "$APP_NAME"; then
-  echo "Podman container image built successfully: $IMAGE_NAME"
+if docker images | grep -q "$APP_NAME"; then
+  echo "Docker container image built successfully: $IMAGE_NAME"
 else
-  echo "Error: Podman container image build failed."
+  echo "Error: Docker container image build failed."
   exit 1
 fi
