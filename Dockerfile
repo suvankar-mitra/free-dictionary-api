@@ -1,14 +1,23 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:17-jdk-slim
+# Use a minimal official OpenJDK image
+FROM eclipse-temurin:17-jre-jammy
 
-# Set the working directory inside the container
+# Create a non-root user
+RUN useradd -ms /bin/bash springuser
+
+# Set the working directory
 WORKDIR /app
 
-# Copy the built JAR file into the container
+# Copy the JAR file into the container
 COPY target/app.jar app.jar
 
-# Expose the port your application runs on
+# Change ownership of the app files
+RUN chown -R springuser:springuser /app
+
+# Switch to the non-root user
+USER springuser
+
+# Expose app's port
 EXPOSE 8010
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the app with some sane default JVM memory settings
+ENTRYPOINT ["java", "-Xms256m", "-Xmx512m", "-jar", "app.jar"]
