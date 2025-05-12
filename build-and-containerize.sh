@@ -58,3 +58,6 @@ else
   echo "Error: Docker container image build failed."
   exit 1
 fi
+
+# Step 5: Run the docker image
+docker run -d --restart unless-stopped --name free-dictionary-api -p 8010:8010 free-dictionary-api:latest
